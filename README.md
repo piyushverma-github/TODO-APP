@@ -1,5 +1,4 @@
 ToDo-App using Django
-
 This repository hosts a ToDo application built with Django, designed to streamline task management. 
 Whether you're organizing your personal to-dos or collaborating with a team, this application provides a simple and efficient way to keep track of your tasks.
 
