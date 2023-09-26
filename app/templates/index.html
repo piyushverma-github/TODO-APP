@@ -1,0 +1,88 @@
+{% extends 'base.html' %}  <!-- Extends a base template called 'base.html'. -->
+
+{% block content %}
+<div>
+  <div class="container pt-4">
+    <div class="row  p-0 mt-4">
+      <div class="col-lg-4 mx-auto shadow p-0">
+        <div class="alert alert-info">
+          <h2>Add New TODO</h2>
+        </div>
+        <div class="p-4">
+          <form action="/add-todo/" method="POST">
+            {% csrf_token %}  <!-- Django CSRF token to protect against Cross-Site Request Forgery (CSRF) attacks. -->
+            {{form.as_p}}  <!-- Renders the form fields as paragraphs. -->
+            <hr>
+            <input type="submit" value="ADD" class="bttn btn-info">  <!-- Submit button for adding a new TODO. -->
+          </form>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="border">
+
+          {% if todos|length == 0 %}
+          <!-- Displayed when there are no TODO items. -->
+
+          <div class="p-4">
+            <br>
+            <br>
+            <div class="alert alert-info text-center">
+              <p class="" style="font-size: 30px;">No Todos</p>
+            </div>
+            <br>
+            <br>
+          </div>
+
+          {% else %}
+          <!-- Displayed when there are TODO items to show. -->
+
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {% for todo in todos %}
+                <!-- Loop through the list of TODO items. -->
+
+                <tr>
+                  <td>{{forloop.counter}}</td>  <!-- Display the item number in the loop. -->
+                  <td>{{todo.title}}</td>  <!-- Display the title of the TODO item. -->
+                  <td>
+                    {% if todo.status == 'C' %}
+                    ✅  <!-- Display a checkmark if the status is 'C' (Completed). -->
+                    {% else %}
+                    🕒  <!-- Display a clock icon if the status is 'P' (Pending). -->
+                    {% endif %}
+                  </td>
+                  <td>{{todo.priority}}</td>  <!-- Display the priority of the TODO item. -->
+                  <td>
+                    <a href="/delete-todo/{{todo.id}}" title="Delete" class="">🗑️</a>  <!-- Link to delete the TODO item. -->
+                    {% if todo.status == 'P' %}
+                    <a href="/change-status/{{todo.id}}/C" title="Mark Completed" class="">✅</a>  <!-- Link to mark as completed. -->
+                    {% else %}
+                    <a href="/change-status/{{todo.id}}/P" title="Mark Pending" class="">🕒</a>  <!-- Link to mark as pending. -->
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
